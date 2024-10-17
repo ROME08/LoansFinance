@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LoansProject.Areas.Identity.Data;
 using Microsoft.Extensions.Hosting;
+using LoansProject.Interfaces;
+using LoansProject.Business;
+using LoansProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
@@ -10,6 +13,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+builder.Services.AddScoped<AmortizationService>();
+builder.Services.AddScoped<IAmortization, GraduatedAmortization>();
+//Other solution: Inject simply the business logic such as:
+// 
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
